@@ -1,0 +1,80 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: images
+    // Document ID: [imageId] (e.g., 'buuLogo', 'studentImage')
+    // Fields:
+    //   - dataUrl: string (required, < 1MB) - Base64 encoded image data
+    //   - updatedAt: timestamp (required) - When the image was last updated
+    //
+    // Collection: users
+    // Document ID: [userId]
+    // Fields:
+    //   - email: string (required)
+    //   - role: string (required, 'admin' or 'viewer')
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        (
+          (exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+           get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin') ||
+          (request.auth.token.email == '12bdDB@gmail.com' && request.auth.token.email_verified == true)
+        );
+    }
+
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
+    }
+
+    function isValidImageAsset(data) {
+      return hasOnlyAllowedFields(['dataUrl', 'updatedAt']) &&
+             data.dataUrl is string && data.dataUrl.size() > 0 && data.dataUrl.size() < 1000000 &&
+             data.updatedAt is timestamp;
+    }
+
+    function isValidUser(data) {
+      return hasOnlyAllowedFields(['email', 'role']) &&
+             data.email is string && data.email.size() > 0 && data.email.size() < 100 &&
+             data.role in ['admin', 'viewer'];
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    match /images/{imageId} {
+      // Allow read for anyone so the portfolio is public
+      allow read: if true;
+      
+      // Allow anyone to upload images
+      allow create: if isValidImageAsset(request.resource.data);
+      allow update: if isValidImageAsset(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    match /users/{userId} {
+      // Users can read their own profile, admins can read all
+      allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      
+      // Only admins can create or update users
+      allow create: if isAdmin() && isValidUser(request.resource.data);
+      allow update: if isAdmin() && isValidUser(request.resource.data);
+      allow delete: if isAdmin();
+    }
+  }
+}

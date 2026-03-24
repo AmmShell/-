@@ -1,0 +1,46 @@
+{
+  "entities": {
+    "ImageAsset": {
+      "title": "Image Asset",
+      "description": "Stores base64 encoded image data for the application.",
+      "type": "object",
+      "properties": {
+        "dataUrl": {
+          "type": "string",
+          "description": "The base64 encoded data URL of the image."
+        },
+        "updatedAt": {
+          "type": "timestamp",
+          "description": "When the image was last updated."
+        }
+      },
+      "required": ["dataUrl", "updatedAt"]
+    },
+    "User": {
+      "title": "User",
+      "description": "User profile and role information.",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "role": {
+          "type": "string",
+          "enum": ["admin", "viewer"]
+        }
+      },
+      "required": ["email", "role"]
+    }
+  },
+  "firestore": {
+    "/images/{imageId}": {
+      "schema": { "$ref": "ImageAsset" },
+      "description": "Stores all image assets used in the application."
+    },
+    "/users/{userId}": {
+      "schema": { "$ref": "User" },
+      "description": "Stores user profiles."
+    }
+  }
+}
