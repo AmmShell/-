@@ -1,4 +1,4 @@
-import { FolderKanban, Link as LinkIcon, Edit2, ExternalLink, Code } from 'lucide-react';
+import { FolderKanban, Link as LinkIcon, Edit2, ExternalLink } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { doc, onSnapshot, setDoc, serverTimestamp } from 'firebase/firestore';
 import { db, handleFirestoreError, OperationType } from '../firebase';
@@ -10,11 +10,6 @@ export default function Projects() {
   const [inputValue, setInputValue] = useState('');
   const [isSaving, setIsSaving] = useState(false);
 
-  const [sourceLink, setSourceLink] = useState<string>('');
-  const [isEditingSource, setIsEditingSource] = useState(false);
-  const [inputSourceValue, setInputSourceValue] = useState('');
-  const [isSavingSource, setIsSavingSource] = useState(false);
-
   useEffect(() => {
     const docRef = doc(db, 'images', 'projectLink');
     const unsubscribe = onSnapshot(docRef, (snapshot) => {
@@ -23,19 +18,6 @@ export default function Projects() {
       }
     }, (error) => {
       handleFirestoreError(error, OperationType.GET, 'images/projectLink');
-    });
-
-    return () => unsubscribe();
-  }, []);
-
-  useEffect(() => {
-    const docRef = doc(db, 'images', 'sourceLink');
-    const unsubscribe = onSnapshot(docRef, (snapshot) => {
-      if (snapshot.exists()) {
-        setSourceLink(snapshot.data().dataUrl || '');
-      }
-    }, (error) => {
-      handleFirestoreError(error, OperationType.GET, 'images/sourceLink');
     });
 
     return () => unsubscribe();
@@ -62,7 +44,7 @@ export default function Projects() {
 
   return (
     <div className="min-h-[60vh] flex flex-col items-center justify-center animate-in fade-in duration-500">
-      <div className="bg-white p-8 md:p-12 rounded-2xl shadow-sm border border-gray-100 text-center w-full max-w-4xl">
+      <div className="bg-white p-8 md:p-12 rounded-2xl shadow-sm border border-gray-100 text-center w-full max-w-5xl">
         <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6">
           <FolderKanban className="w-10 h-10 text-blue-500" />
         </div>
@@ -71,10 +53,10 @@ export default function Projects() {
           สแกน QR Code หรือคลิกลิงก์ด้านล่างเพื่อเข้าชมผลงานที่ได้ดำเนินการตลอดระยะเวลาของการฝึกงาน
         </p>
         
-        <div className="flex flex-col md:flex-row gap-12 md:gap-8 items-center justify-center">
+        <div className="flex flex-col md:flex-row flex-wrap gap-12 md:gap-8 items-start justify-center">
           {/* QR Code Section */}
           <div className="flex flex-col items-center gap-4">
-            <div className="w-48 h-48 md:w-64 md:h-64 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-300 p-2 overflow-hidden flex items-center justify-center">
+            <div className="w-56 h-56 md:w-72 md:h-72 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-300 p-2 overflow-hidden flex items-center justify-center">
               <ImageUploader 
                 imageId="projectQrCode" 
                 defaultImage="https://images.unsplash.com/photo-1595054225542-f94b81098672?w=400&h=400&fit=crop"
@@ -151,74 +133,6 @@ export default function Projects() {
                 </button>
               </div>
             )}
-
-            {/* Source Code Link Section */}
-            <div className="w-full mt-6 pt-6 border-t border-gray-100">
-              <h3 className="text-lg font-semibold text-gray-900">ลิงก์ซอร์สโค้ด / ไฟล์ต้นฉบับ</h3>
-              <p className="text-sm text-gray-500 text-center md:text-left mb-4">
-                สำหรับผู้ที่สนใจนำผลงานไปพัฒนาต่อยอด
-              </p>
-
-              {!sourceLink && !isEditingSource ? (
-                <button 
-                  onClick={() => {
-                    setInputSourceValue('');
-                    setIsEditingSource(true);
-                  }}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-full text-sm font-medium hover:bg-blue-700 transition-colors shadow-sm w-full justify-center"
-                >
-                  <Code className="w-4 h-4" />
-                  เพิ่มลิงก์ซอร์สโค้ด
-                </button>
-              ) : isEditingSource ? (
-                <div className="w-full bg-gray-50 p-4 rounded-xl border border-gray-200">
-                  <input
-                    type="url"
-                    value={inputSourceValue}
-                    onChange={(e) => setInputSourceValue(e.target.value)}
-                    placeholder="https://github.com/... หรือ Google Drive"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all mb-3 text-sm"
-                  />
-                  <div className="flex justify-end gap-2">
-                    <button
-                      onClick={() => setIsEditingSource(false)}
-                      className="px-3 py-1.5 text-xs font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-200 rounded-lg transition-colors"
-                    >
-                      ยกเลิก
-                    </button>
-                    <button
-                      onClick={handleSaveSourceUrl}
-                      disabled={isSavingSource || !inputSourceValue.trim()}
-                      className="px-3 py-1.5 text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors disabled:opacity-50"
-                    >
-                      {isSavingSource ? 'กำลังบันทึก...' : 'บันทึก'}
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex flex-col gap-3 w-full">
-                  <a 
-                    href={sourceLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-blue-50 text-blue-700 rounded-xl text-sm font-medium border border-blue-200 hover:bg-blue-100 transition-colors break-all"
-                  >
-                    <Code className="w-4 h-4 flex-shrink-0" />
-                    <span className="truncate">{sourceLink}</span>
-                  </a>
-                  <button 
-                    onClick={() => {
-                      setInputSourceValue(sourceLink);
-                      setIsEditingSource(true);
-                    }}
-                    className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium border border-gray-200 hover:bg-gray-200 transition-colors"
-                  >
-                    <Edit2 className="w-4 h-4" />
-                    แก้ไขลิงก์
-                  </button>
-                </div>
-              )}
-            </div>
           </div>
         </div>
       </div>
