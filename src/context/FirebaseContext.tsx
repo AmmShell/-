@@ -61,10 +61,12 @@ export const FirebaseProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       'studentImage',
       'mentor1Image',
       'mentor2Image',
+      'supervisorImage',
       'companyLocationImage',
       'relatedPhoto1',
       'relatedPhoto2',
-      'relatedPhoto3'
+      'relatedPhoto3',
+      'projectQrCode'
     ];
 
     const unsubscribes = imageIds.map(id => {

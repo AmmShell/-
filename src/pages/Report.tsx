@@ -41,18 +41,6 @@ export default function Report() {
     }
   };
 
-  // Convert Google Drive view link to preview link for iframe
-  const getEmbedUrl = (url: string) => {
-    if (!url) return '';
-    if (url.includes('drive.google.com/file/d/')) {
-      const match = url.match(/\/d\/(.+?)\//);
-      if (match && match[1]) {
-        return `https://drive.google.com/file/d/${match[1]}/preview`;
-      }
-    }
-    return url;
-  };
-
   return (
     <div className="min-h-[60vh] flex flex-col items-center animate-in fade-in duration-500">
       <div className="bg-white p-8 md:p-12 rounded-2xl shadow-sm border border-gray-100 text-center w-full max-w-4xl">
@@ -131,17 +119,6 @@ export default function Report() {
                 <Edit2 className="w-4 h-4" />
                 แก้ไขลิงก์
               </button>
-            </div>
-
-            {/* PDF Viewer */}
-            <div className="w-full aspect-[1/1.4] md:aspect-[16/9] bg-gray-100 rounded-xl border border-gray-200 overflow-hidden shadow-inner relative group">
-              <iframe 
-                src={getEmbedUrl(pdfUrl)} 
-                className="w-full h-full border-0"
-                title="PDF Viewer"
-                allow="autoplay"
-              ></iframe>
-              <div className="absolute inset-0 pointer-events-none border border-black/5 rounded-xl"></div>
             </div>
           </div>
         )}

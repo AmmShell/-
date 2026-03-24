@@ -24,6 +24,33 @@ export default function Home() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* University Supervisor Info */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:col-span-2">
+          <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
+            <div className="p-2 bg-amber-50 rounded-lg text-amber-600">
+              <User className="w-6 h-6" />
+            </div>
+            <h2 className="text-2xl font-semibold text-gray-900">อาจารย์นิเทศ</h2>
+          </div>
+          
+          <div className="flex flex-col items-center text-center max-w-sm mx-auto">
+            <div className="w-40 h-40 rounded-xl overflow-hidden bg-gray-100 border-4 border-amber-100 shadow-md mb-4 flex-shrink-0">
+              <ImageUploader 
+                imageId="supervisorImage" 
+                defaultImage="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop"
+                alt="ผู้ช่วยศาสตราจารย์ ดร.ปริญญา เรืองทิพย์"
+              />
+            </div>
+            <div className="space-y-1">
+              <p className="text-xl font-bold text-gray-900">ผู้ช่วยศาสตราจารย์ ดร.ปริญญา เรืองทิพย์</p>
+              <p className="text-amber-600 font-medium">อาจารย์นิเทศ</p>
+              <p className="text-sm text-gray-500 mt-2">
+                คณะศึกษาศาสตร์ สาขาวิชาเทคโนโลยีดิจิทัลเพื่อการฝึกอบรมทรัพยากรมนุษย์ในองค์กร มหาวิทยาลัยบูรพา
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* Student Info */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
           <div className="flex items-center gap-3 mb-6 border-b border-gray-100 pb-4">
@@ -76,7 +103,7 @@ export default function Home() {
           <div className="space-y-6">
             {/* Mentor 1 */}
             <div className="flex items-center gap-4 p-4 rounded-xl bg-gray-50 border border-gray-100">
-              <div className="w-16 h-16 rounded-full overflow-hidden bg-white border-2 border-white shadow-sm flex-shrink-0">
+              <div className="w-24 h-24 rounded-full overflow-hidden bg-white border-2 border-white shadow-sm flex-shrink-0">
                 <ImageUploader 
                   imageId="mentor1Image" 
                   defaultImage="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop"
@@ -91,7 +118,7 @@ export default function Home() {
 
             {/* Mentor 2 */}
             <div className="flex items-center gap-4 p-4 rounded-xl bg-gray-50 border border-gray-100">
-              <div className="w-16 h-16 rounded-full overflow-hidden bg-white border-2 border-white shadow-sm flex-shrink-0">
+              <div className="w-24 h-24 rounded-full overflow-hidden bg-white border-2 border-white shadow-sm flex-shrink-0">
                 <ImageUploader 
                   imageId="mentor2Image" 
                   defaultImage="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop"
@@ -101,17 +128,6 @@ export default function Home() {
               <div>
                 <p className="font-semibold text-gray-900">คุณวายุภัทร์ ยินมะเริง (พี่ต้นกล้า)</p>
                 <p className="text-sm text-indigo-600 font-medium mt-1">เจ้าหน้าที่แผนก HR</p>
-              </div>
-            </div>
-
-            {/* University Supervisor */}
-            <div className="flex items-center gap-4 p-4 rounded-xl bg-gray-50 border border-gray-100">
-              <div className="w-16 h-16 rounded-full overflow-hidden bg-white border-2 border-white shadow-sm flex-shrink-0 flex items-center justify-center text-gray-400">
-                <User className="w-8 h-8" />
-              </div>
-              <div>
-                <p className="font-semibold text-gray-900">รอระบุชื่ออาจารย์นิเทศ</p>
-                <p className="text-sm text-indigo-600 font-medium mt-1">อาจารย์นิเทศ</p>
               </div>
             </div>
           </div>
