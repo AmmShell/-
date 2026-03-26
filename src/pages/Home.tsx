@@ -127,7 +127,7 @@ export default function Home() {
               </div>
               <div>
                 <p className="font-semibold text-gray-900">คุณวายุภัทร์ ยินมะเริง (พี่ต้นกล้า)</p>
-                <p className="text-sm text-indigo-600 font-medium mt-1">เจ้าหน้าที่แผนก HR</p>
+                <p className="text-sm text-indigo-600 font-medium mt-1">HR Supervisor</p>
               </div>
             </div>
           </div>
